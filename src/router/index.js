@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Login from '../components/Login.vue'
+import Home from '../components/Home.vue'
+import Welcome from '../components/Welcome.vue'
+import CookList from '../components/cook/CookList.vue'
+import CookAdd from '../components/cook/CookAdd.vue'
+import CategoryList from '../components/category/CategoryList.vue'
+import CategoryAdd from '../components/category/CategoryAdd.vue'
 Vue.use(VueRouter)
-const login = () => import('@/components/Login')
-const home = () => import('@/components/Home')
 const router = new VueRouter({
   // mode: 'history',
   routes: [{
@@ -11,13 +16,33 @@ const router = new VueRouter({
     },
     {
       path: '/login',
-      name: 'login',
-      component: login
+      component: Login
     },
     {
       path: '/home',
-      name: 'home',
-      component: home
+      component: Home,
+      redirect: '/welcome',
+      children: [{
+          path: '/welcome',
+          component: Welcome
+        },
+        {
+          path: '/cooklist',
+          component: CookList
+        },
+        {
+          path: '/cookadd',
+          component: CookAdd
+        },
+        {
+          path: '/categorylist',
+          component: CategoryList
+        },
+        {
+          path: '/categoryadd',
+          component: CategoryAdd
+        }
+      ]
     }
   ]
 })
@@ -29,8 +54,8 @@ router.beforeEach((to, from, next) => {
   // next（） 放行 next（‘login’）强制跳转
   if (to.path === '/login') return next();
   //获取token
-  const token = window.sessionStorage.getItem('token')
-  if (!token) return next('/login');
+  const tokenStr = window.sessionStorage.getItem('token')
+  if (!tokenStr) return next('/login');
   next();
 
 })

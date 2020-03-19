@@ -19,34 +19,11 @@ Vue.use(ElementUI);
 // Vue.use(echarts);
 
 
-// const helloworld = () => import('@/components/HelloWorld')
-// const temperatureinput = () => import('@/components/temperatureInput')
-// const temperatureshow = () => import('@/components/temperatureShow')
-
-// const routers = [
-//   {
-//     path:"/",
-//     redirect: '/helloworld'
-//   },
-//   {
-//     path: '/helloworld',
-//     name: 'helloworld',
-//     component: helloworld
-//   },
-//   {
-//     path: '/temperatureinput',
-//     name: 'temperatureinput',
-//     component: temperatureinput
-//   },
-//   {
-//     path: '/temperatureshow',
-//     name: 'temperatureshow',
-//     component: temperatureshow
-//   }
-// ]
-// const router = new router({
-// 	routers
-// })
+// 通过axios请求拦截器添加token，保证拥有获取数据的权限
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config;
+})
 new Vue({
   render: h => h(App),
   router,

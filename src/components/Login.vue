@@ -30,8 +30,8 @@ export default {
   data() {
     return {
       loginform: {
-        username: "admin",
-        password: "admin888"
+        username: "",
+        password: ""
       },
       loginFormRules: {
         username: [
@@ -50,13 +50,24 @@ export default {
       this.$refs.loginFormRef.resetFields();
     },
     login() {
-      this.$refs.loginFormRef.validate(valid => {
+      this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return;
-        this.axios
-          .post("http://127.0.0.1:8888/api/private/v1/login", this.loginform)
-          .then(response => {
-            console.log(response);
-          });
+        const response = await this.axios.post(
+          "http://47.97.251.68:3000/admin/auth/login",
+          this.loginform
+        );
+        if (response.status !== 201) return this.$message.error("登录失败");
+        this.$message.success("登录成功");
+        window.sessionStorage.setItem("token", response.data.access_token);
+        this.$router.push("/home");
+        // console.log(response);
+        // if (response.status == 201) {
+        //   this.$message.success("登录成功");
+        //   window.sessionStorage.getItem("token", response.data.access_token);
+        //   console.log("1111");
+        //   this.$router.push("/home");
+        // }
+
         // this.$message.success("登录成功");
         // this.$message.error("登录失败");
         //1.将登录之后的token，保存到客户端的seesionStorage中
