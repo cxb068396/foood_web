@@ -182,7 +182,7 @@ export default {
     async cookChangInfo() {
       this.$refs.cookFormRef.validate(async valid => {
         if (!valid) return;
-        const response = await this.axios.post(
+        const response = await this.axios.put(
           "http://47.97.251.68:3000/chef/" + this.id,
           this.cookForm
         );
